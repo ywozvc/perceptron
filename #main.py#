@@ -1,0 +1,66 @@
+from csv import reader
+import perception
+# Load a CSV file
+def load_csv(filename):
+    """
+    Description
+    ---
+    Loads a CSV file from disk as a csv.reader object  and
+    outputs a python list object. the first column should be the independent variable
+    and the second column would be the dependent variable
+
+    Parameters
+    ---
+    filename :  file object
+                CSV file that contains the values for the dependent variable 'Y'
+                and the independent variable 'X'. using '\t' delimiter by default
+                and non european decimal (. and not , for marking decimals in
+                floats)
+
+    Returns
+    ---
+    dataset :   list
+                list of lists. the dataset list object is made up of each
+                individual data element from the file as a list itself
+                e.g. [[a,b], [c,d],[e,f]...]
+                the variables a, b, c...etc are floats
+
+    Raises
+    ---
+    no error handling implemented but could add error for particular IO errors
+
+
+    """
+    dataset = list()
+    with open(filename, 'r') as file:
+        csv_reader = reader(file, delimiter='\t')
+        for row in csv_reader:
+            if not row:
+                continue
+            dataset.append([float(i) for i in row])
+    return dataset
+
+
+  
+p = Perceptron(2)
+for point, label in learnset:
+    p.adjust(label, p(point), point)
+    
+evaluation = Counter()
+
+for point, label in learnset:
+    if p(point) == label:
+        evaluation["correct"] += 1
+    else:
+        evaluation["wrong"] += 1
+print(evaluation.most_common())
+colours = ["b", "r"]
+for i in range(2):
+    plt.scatter(X[i], Y[i], c=colours[i])
+XR = np.arange(-8, 4)  
+m = -p.weights[0] / p.weights[1]
+b = -p.weights[-1]/p.weights[1]
+print(m, b)
+plt.plot(XR, m*XR + b, label="decision boundary")
+plt.legend()
+plt.show()

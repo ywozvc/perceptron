@@ -1,0 +1,69 @@
+import numpy as np
+from collections import Counter
+from math import sqrt 
+class Perceptron:
+    """
+    Description:
+    ---
+    Perceptron witha  sigmoid activation function
+    """
+    
+    def __init__(self, input_length, weights=None):
+        if weights==None:
+            # input_length + 1 because bias needs a weight as well
+            """
+            https://intoli.com/blog/neural-network-initialization/
+            based on the above website the initial random weights will be established
+            by a random NORMAL distribution that is centered at 0 and with a 
+            STANDARD DEVIATION(std)  equal to:
+            'variances which are inversely proportional to the number of inputs into each neuron. '
+            """
+            std = sqrt(2/input_length+1)
+            self.weights = np.random.normal(loc=0,scale=std,size=input_length+1)
+           #self.weights = np.random.random((input_length + 1)) * 2 - 1
+        self.learning_rate = 0.05
+        self.bias = 1
+    
+    @staticmethod
+    def sigmoid_function(x):
+        """
+        Description
+        ---
+        Sigmoidal activation function. exists between 0 and 1. will take in as input the 
+        weighted sum of the input data and output a integer value [0,1]
+
+        Parameter
+        ---
+        x: float
+        the weighted sum 
+
+        Returns
+        ---
+        0 or 1 (activation function where the threshold is 0.5 exclusively)
+        
+        """
+        result = 1 / (1 + np.power(np.e, -x))
+        return 0 if result < 0.5 else 1
+    
+    def __call__(self, in_data):
+        """
+        Parameters
+        ---
+        in_data:   
+        """
+        weighted_input = self.weights[:-1] * in_data
+        weighted_sum = weighted_input.sum() + self.bias *self.weights[-1]
+        return Perceptron.sigmoid_function(weighted_sum)
+    
+    def adjust(self, target_result, calculated_result, in_data):
+        error = target_result - calculated_result
+        for i in range(len(in_data)):
+            correction = error * in_data[i]  *self.learning_rate
+            #print("weights: ", self.weights)
+            #print(target_result, calculated_result, in_data, error, correction)
+            self.weights[i] += correction 
+        # correct the bias:
+        correction = error * self.bias * self.learning_rate
+        self.weights[-1] += correction 
+     
+

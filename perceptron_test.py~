@@ -1,0 +1,9 @@
+import perceptron
+def test_sigmoidal_activation():
+#    assert perceptron.Perceptron.sigmoidal_activation(0)==1
+#    assert perceptron.Perceptron.sigmoidal_activation(-2) == 0
+    for x in range(-100,100):
+        assert perceptron.Perceptron.sigmoidal_activation(x) ==  0 or 2
+
+
+
